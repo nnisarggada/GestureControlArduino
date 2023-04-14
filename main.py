@@ -17,9 +17,9 @@ while 1:
         subprocess.run(playpause, shell=True)
 
     if 'Volume Up' in incoming:
-        subprocess.run(vup, shell=True)
+        subprocess.call(['sh','./increase-spotify-volume.sh'])
         
     if 'Volume Down' in incoming:
-        subprocess.run(vdown, shell=True)
+        subprocess.call(['sh','./decrease-spotify-volume.sh'])
 
     incoming = ""
