@@ -5,21 +5,23 @@ import subprocess
 ArduinoSerial = serial.Serial(port='/dev/ttyACM0',baudrate=9600)
 time.sleep(2) #wait for 2 seconds for the communication to get established
 
-playpause = "playerctl play-pause"
-vup = "pactl -- set-sink-volume 0 +10%"
-vdown = "pactl -- set-sink-volume 0 -10%"
+playpause = "playerctl --player=spotify play-pause"
+check_vol = "playerctl --player=spotify volume"
 
 while 1:
     incoming = str (ArduinoSerial.readline()) #read the serial data and print it as line
     print(incoming)
+    current_vol = float(subprocess.check_output(check_vol, shell=True))
+    vol_up = f"playerctl --player=spotify volume {current_vol+0.05} +"
+    vol_down = f"playerctl --player=spotify volume {current_vol-0.05} -"
     
     if 'Play/Pause' in incoming:
         subprocess.run(playpause, shell=True)
 
     if 'Volume Up' in incoming:
-        subprocess.call(['sh','./increase-spotify-volume.sh'])
+        subprocess.run(vol_up, shell=True)
         
     if 'Volume Down' in incoming:
-        subprocess.call(['sh','./decrease-spotify-volume.sh'])
+        subprocess.run(vol_down, shell=True)
 
     incoming = ""

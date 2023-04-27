@@ -2,4 +2,4 @@
 
 sudo chmod a+rw /dev/ttyACM0
 
-python ./main.py
+python main.py
